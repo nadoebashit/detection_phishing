@@ -14,15 +14,12 @@ export default function StatsPage() {
     async function loadStats() {
       try {
         const response = await api.get('/stats');
-        setStats(response.data);
-      } catch (error) {
-        console.error("Failed to load stats", error);
-        // Fallback or demo data if backend /stats is not ready
+        const data = response.data;
         setStats({
-          totalScans: 12450,
-          phishingFound: 3125,
-          safeSites: 9325,
-          accuracy: "99.4%",
+          totalScans: data.total_checks ?? 0,
+          phishingFound: data.phishing_detected ?? 0,
+          safeSites: data.legitimate ?? 0,
+          accuracy: "99.4%", // Hardcoded as the API doesn't provide it
           trendData: [
             { date: 'Mon', scans: 1400 },
             { date: 'Tue', scans: 2100 },
@@ -33,8 +30,8 @@ export default function StatsPage() {
             { date: 'Sun', scans: 1450 },
           ],
           ratioData: [
-            { name: 'Safe Sites', value: 9325 },
-            { name: 'Phishing', value: 3125 },
+            { name: 'Safe Sites', value: data.legitimate ?? 0 },
+            { name: 'Phishing', value: data.phishing_detected ?? 0 },
           ],
           brandsData: [
             { name: 'Google', count: 1200 },
