@@ -21,6 +21,7 @@ class CheckResponse(BaseModel):
     scores: dict
     screenshot_url: str
     original_screenshot_url: str | None
+    detailed_analysis: str
 
 @router.post("/check", response_model=CheckResponse)
 async def check_url_endpoint(req: CheckRequest, db: AsyncSession = Depends(get_db)):
@@ -66,11 +67,30 @@ async def check_url_endpoint(req: CheckRequest, db: AsyncSession = Depends(get_d
             logger.error(f"Error evaluating against {site.domain}: {e}")
             continue
             
+    def generate_analysis(url_val, is_phish, conf, sim_to, cnn_s):
+        if is_phish:
+            score_pct = round((cnn_s or 0) * 100)
+            return f'The URL "{url_val}" failed the deep visual inspection. Our neural network detected structural and conceptual similarities (CNN Score: {score_pct}%) with the legitimate brand "{sim_to}". Combined with perceptual and pixel-level checks, this strongly indicates a phishing spoof. Do not enter any sensitive information here.'
+        elif conf == 0:
+            return f'The URL "{url_val}" has fully passed the visual inspection. Deep CNN features and layout perceptual hashes show no resemblance to any protected brands in our database. The system concludes this layout is unique and safe from known templates.'
+        else:
+            return f'The URL "{url_val}" has been marked as SAFE. While there were minor structural similarities to some protected interfaces ({round(conf * 100)}% confidence), it did not surpass the multi-factor heuristic threshold required to trigger a phishing alert.'
+
+    detailed_text = generate_analysis(
+        req.url, 
+        is_phishing, 
+        highest_confidence, 
+        best_match if is_phishing else None, 
+        best_scores.get("cnn", 0.0)
+    )
+
     new_check = Check(
         url=req.url,
         screenshot_path=screenshot_path,
         result="Phishing" if is_phishing else "Legitimate",
-        confidence=highest_confidence
+        confidence=highest_confidence,
+        similar_to=best_match if is_phishing else None,
+        detailed_analysis=detailed_text
     )
     db.add(new_check)
     await db.commit()
@@ -82,7 +102,8 @@ async def check_url_endpoint(req: CheckRequest, db: AsyncSession = Depends(get_d
         similar_to=best_match if is_phishing else None,
         scores=best_scores,
         screenshot_url=f"http://localhost:8000/{screenshot_path}" if screenshot_path else "",
-        original_screenshot_url=f"http://localhost:8000/{best_match.screenshot_path}" if is_phishing and best_match else None
+        original_screenshot_url=f"http://localhost:8000/{best_match.screenshot_path}" if is_phishing and best_match else None,
+        detailed_analysis=detailed_text
     )
 
 @router.get("/history")

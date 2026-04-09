@@ -5,6 +5,7 @@ export interface CheckResult {
   similar_to: string | null;
   screenshot_url: string;
   original_screenshot_url: string | null;
+  detailed_analysis: string;
   scores: {
     phash: number;
     ssim: number;

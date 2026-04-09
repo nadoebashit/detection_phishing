@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCheckerStore } from "../../store/useCheckerStore";
+import { useCheckerStore } from "../../../store/useCheckerStore";
 import HistoryTable from "@/components/history/HistoryTable";
 import { Search } from "lucide-react";
 

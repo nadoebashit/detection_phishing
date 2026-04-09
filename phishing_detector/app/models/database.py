@@ -26,6 +26,8 @@ class Check(Base):
     screenshot_path: Mapped[str] = mapped_column(String)
     result: Mapped[str] = mapped_column(String) 
     confidence: Mapped[float] = mapped_column(Float)
+    similar_to: Mapped[str] = mapped_column(String, nullable=True)
+    detailed_analysis: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     
 class Match(Base):

@@ -74,6 +74,15 @@ export default function ResultCard({ result, onCheckAnother }: ResultCardProps) 
         similarTo={result.similar_to}
       />
 
+      <div className={`mt-10 p-6 rounded-2xl border ${isPhishing ? 'bg-[#FF4444]/5 border-[#FF4444]/20' : 'bg-white/5 border-white/10'}`}>
+        <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          Deep Analysis Report
+        </h3>
+        <p className="text-gray-300 leading-relaxed text-base">
+          {result.detailed_analysis || "Analysis unavailable."}
+        </p>
+      </div>
+
       <div className="mt-12 flex justify-center">
         <button
           onClick={onCheckAnother}
