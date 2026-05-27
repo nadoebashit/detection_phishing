@@ -44,11 +44,7 @@ function HistoryRow({ item }: { item: CheckResult }) {
             <div className="flex flex-col gap-3 ml-2">
               <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Deep Analysis Report</h4>
               <p className="text-gray-300 text-sm leading-relaxed max-w-4xl">
-                {item.is_phishing 
-                  ? `The URL "${item.url}" failed the visual inspection. Our neural networks detected algorithmic structural and functional similarities with the legitimate brand "${item.similar_to}". This strongly indicates a phishing spoof.`
-                  : (confidence === 0 
-                    ? `The URL "${item.url}" has passed the deep inspection. Deep CNN features and layout perceptual hashes show no resemblance to any protected brands in our database. The system concludes this layout is unique and safe.`
-                    : `The URL "${item.url}" has been marked as SAFE. While there were minor structural similarities to some protected interfaces (${confidence}% confidence), it did not surpass the multi-factor heuristic threshold required to trigger a phishing alert.`)}
+                {item.detailed_analysis || "No detailed analysis available."}
               </p>
             </div>
           </td>

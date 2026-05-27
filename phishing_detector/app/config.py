@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
+    FIREWORKS_API_KEY: str = "fw_H9AodDXCTHZXcRef8Lwsc9"
+    FIREWORKS_MODEL: str = "accounts/fireworks/models/kimi-k2p6"
     
     class Config:
         env_file = ".env"

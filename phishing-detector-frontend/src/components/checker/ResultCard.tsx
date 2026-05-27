@@ -37,7 +37,7 @@ export default function ResultCard({ result, onCheckAnother }: ResultCardProps) 
             <h2 className={`text-4xl sm:text-5xl font-bold tracking-tight mb-2 ${statusColor}`}>
               {isPhishing ? 'PHISHING' : 'SAFE'}
             </h2>
-            <p className="text-gray-300 text-lg break-all">
+            <p className="text-white text-lg font-semibold break-all">
               {result.url}
             </p>
             {isPhishing && result.similar_to && (

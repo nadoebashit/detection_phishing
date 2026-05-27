@@ -43,7 +43,8 @@ export default function URLForm({ onSubmit, isLoading }: URLFormProps) {
           type="text"
           placeholder="example.com/login"
           disabled={isLoading}
-          className="flex-1 bg-transparent border-none outline-none text-white px-2 py-4 sm:py-2 text-lg placeholder:text-gray-600 disabled:opacity-50"
+          style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}
+          className="flex-1 bg-transparent border-none outline-none text-white px-2 py-4 sm:py-2 text-lg placeholder:text-gray-500 focus:placeholder:text-gray-400 disabled:opacity-50 font-semibold"
         />
         <button
           type="submit"
